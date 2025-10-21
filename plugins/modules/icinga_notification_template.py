@@ -108,6 +108,18 @@ options:
     type: bool
     choices: [true, false]
     version_added: '1.25.0'
+  imports:
+    description:
+      - Importable templates, add as many as you want. Required when state is C(present).
+      - Please note that order matters when importing properties from multiple templates - last one wins.
+      - Required if I(state) is C(present).
+    type: "list"
+    elements: str
+  vars:
+    description:
+      - Custom properties of the notification.
+    type: "dict"
+    default: {}
 """
 
 EXAMPLES = """
@@ -132,6 +144,8 @@ EXAMPLES = """
       - "rb"
     user_groups:
       - "OnCall"
+    vars:
+      foo: bar
     zone: "foozone"
 
 - name: Update notification template
@@ -142,6 +156,8 @@ EXAMPLES = """
     url_password: "{{ icinga_pass }}"
     object_name: foonotificationtemplate
     notification_interval: '0'
+    vars:
+      foo: bar
     append: true
 """
 
@@ -167,6 +183,7 @@ def main():
         url=dict(required=True),
         append=dict(type="bool", choices=[True, False]),
         object_name=dict(required=True, aliases=["name"]),
+        imports=dict(type="list", elements="str", required=False),
         notification_interval=dict(required=False),
         states=dict(type="list", elements="str", required=False),
         times_begin=dict(type="int", required=False),
@@ -177,6 +194,8 @@ def main():
         command=dict(required=False, aliases=["notification_command"]),
         users=dict(type="list", elements="str", required=False),
         user_groups=dict(type="list", elements="str", required=False),
+        vars=dict(type="dict", default={}, required=False),
+        api_timeout=dict(required=False, default=10, type="int"),
     )
 
     # Define the main module
@@ -187,6 +206,7 @@ def main():
 
     data_keys = [
         "object_name",
+        "imports",
         "notification_interval",
         "states",
         "times_begin",
@@ -197,6 +217,7 @@ def main():
         "command",
         "users",
         "user_groups",
+        "vars"
     ]
 
     data = {}

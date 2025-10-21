@@ -37,15 +37,15 @@ Parameters
   append (optional, bool, None)
     Do not overwrite the whole object but instead append the defined properties.
 
-    Note - Appending to existing vars, imports or any other list/dict is not possible. You have to overwrite the complete list/dict.
+    Note \- Appending to existing vars, imports or any other list/dict is not possible. You have to overwrite the complete list/dict.
 
-    Note - Variables that are set by default will also be applied, even if not set.
+    Note \- Variables that are set by default will also be applied, even if not set.
 
 
   check_command (optional, str, None)
     The name of the check command.
 
-    Though this is not required to be defined in the director, you still have to supply a check\_command in a host or host-template.
+    Though this is not required to be defined in the director, you still have to supply a check\_command in a host or host\-template.
 
 
   check_interval (optional, str, None)
@@ -139,9 +139,9 @@ Parameters
 
 
   imports (optional, list, None)
-    Choose a Host Template. Required when state is \ :literal:`present`\ .
+    Choose a Host Template. Required when state is :literal:`present`.
 
-    Required if \ :emphasis:`state`\  is \ :literal:`present`\ .
+    Required if :emphasis:`state` is :literal:`present`.
 
 
   master_should_connect (optional, bool, None)
@@ -171,7 +171,7 @@ Parameters
 
     To make things easier for your users we strongly suggest to use meaningful names for templates.
 
-    For example "generic-host" is ugly, "Standard Linux Server" is easier to understand.
+    For example "generic\-host" is ugly, "Standard Linux Server" is easier to understand.
 
 
   retry_interval (optional, str, None)
@@ -195,11 +195,11 @@ Parameters
 
 
   url (True, str, None)
-    HTTP, HTTPS, or FTP URL in the form (http|https|ftp)://[user[:pass]]@host.domain[:port]/path
+    HTTP, HTTPS, or FTP URL in the form (http\|https\|ftp)://[user[:pass]]@host.domain[:port]/path
 
 
   force (optional, bool, False)
-    If \ :literal:`yes`\  do not get a cached copy.
+    If :literal:`yes` do not get a cached copy.
 
 
   http_agent (optional, str, ansible-httpget)
@@ -207,51 +207,55 @@ Parameters
 
 
   use_proxy (optional, bool, True)
-    If \ :literal:`no`\ , it will not use a proxy, even if one is defined in an environment variable on the target hosts.
+    If :literal:`no`\ , it will not use a proxy, even if one is defined in an environment variable on the target hosts.
 
 
   validate_certs (optional, bool, True)
-    If \ :literal:`no`\ , SSL certificates will not be validated.
+    If :literal:`no`\ , SSL certificates will not be validated.
 
-    This should only be used on personally controlled sites using self-signed certificates.
+    This should only be used on personally controlled sites using self\-signed certificates.
 
 
   url_username (optional, str, None)
     The username for use in HTTP basic authentication.
 
-    This parameter can be used without \ :emphasis:`url\_password`\  for sites that allow empty passwords
+    This parameter can be used without :literal:`url\_password` for sites that allow empty passwords.
 
 
   url_password (optional, str, None)
     The password for use in HTTP basic authentication.
 
-    If the \ :emphasis:`url\_username`\  parameter is not specified, the \ :emphasis:`url\_password`\  parameter will not be used.
+    If the :literal:`url\_username` parameter is not specified, the :literal:`url\_password` parameter will not be used.
 
 
   force_basic_auth (optional, bool, False)
-    Credentials specified with \ :emphasis:`url\_username`\  and \ :emphasis:`url\_password`\  should be passed in HTTP Header.
+    Credentials specified with :literal:`url\_username` and :literal:`url\_password` should be passed in HTTP Header.
 
 
   client_cert (optional, path, None)
     PEM formatted certificate chain file to be used for SSL client authentication.
 
-    This file can also include the key as well, and if the key is included, \ :literal:`client\_key`\  is not required.
+    This file can also include the key as well, and if the key is included, :literal:`client\_key` is not required.
 
 
   client_key (optional, path, None)
     PEM formatted file that contains your private key to be used for SSL client authentication.
 
-    If \ :literal:`client\_cert`\  contains both the certificate and key, this option is not required.
+    If :literal:`client\_cert` contains both the certificate and key, this option is not required.
 
 
   use_gssapi (optional, bool, False)
     Use GSSAPI to perform the authentication, typically this is for Kerberos or Kerberos through Negotiate authentication.
 
-    Requires the Python library \ `gssapi <https://github.com/pythongssapi/python-gssapi>`__\  to be installed.
+    Requires the Python library \ `gssapi <https://github.com/pythongssapi/python-gssapi>`__ to be installed.
 
-    Credentials for GSSAPI can be specified with \ :emphasis:`url\_username`\ /\ :emphasis:`url\_password`\  or with the GSSAPI env var \ :literal:`KRB5CCNAME`\  that specified a custom Kerberos credential cache.
+    Credentials for GSSAPI can be specified with :literal:`url\_username`\ /\ :literal:`url\_password` or with the GSSAPI env var :envvar:`KRB5CCNAME` that specified a custom Kerberos credential cache.
 
-    NTLM authentication is \ :literal:`not`\  supported even if the GSSAPI mech for NTLM has been installed.
+    NTLM authentication is :strong:`not` supported even if the GSSAPI mech for NTLM has been installed.
+
+
+  api_timeout (optional, int, 10)
+    Default timeout to wait for transaction to finish in seconds.
 
 
 

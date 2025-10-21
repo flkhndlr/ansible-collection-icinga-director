@@ -8,7 +8,6 @@ import json
 from collections import defaultdict
 
 from ansible.module_utils.urls import fetch_url
-from ansible.module_utils.six import iteritems
 from ansible.module_utils.common.text.converters import to_text
 from ansible.module_utils.six.moves.urllib.parse import quote as urlquote
 
@@ -42,6 +41,7 @@ class Icinga2APIObject(object):
             "X-HTTP-Method-Override": method,
         }
         url = self.module.params.get("url") + "/director" + path
+        api_timeout = self.module.params.get("api_timeout", 10)
         rsp, info = fetch_url(
             module=self.module,
             url=url,
@@ -49,6 +49,7 @@ class Icinga2APIObject(object):
             headers=headers,
             method=method,
             use_proxy=self.module.params["use_proxy"],
+            timeout=api_timeout,
         )
         content = ""
         error = ""
@@ -228,7 +229,7 @@ class Icinga2APIObject(object):
         """
 
         if isinstance(value, dict):
-            for k, v in iteritems(value.copy()):
+            for k, v in value.copy().items():
                 if isinstance(value[k], dict):
                     value[k].pop("command_id", None)
 
@@ -259,6 +260,10 @@ class Icinga2APIObject(object):
             if key in data_from_task.keys() and value != data_from_task[key]:
                 diff["before"][key] = "{val}".format(val=value)
                 diff["after"][key] = "{val}".format(val=data_from_task[key])
+
+        # workaround for type confusion in API, remove when https://github.com/telekom-mms/ansible-collection-icinga-director/issues/285 is solved
+        if diff["before"] == diff["after"]:
+            return {}
 
         return diff
 

@@ -41,20 +41,10 @@ jobs:
           # Add new versions announced in
           # https://github.com/ansible-collections/news-for-maintainers in a timely manner,
           # consider dropping testing against EOL versions and versions you don't support.
-          - stable-2.13
-          - stable-2.14
-          - stable-2.15
+          - stable-2.17
+          - stable-2.18
           - devel
-        # - milestone
-    # Ansible-test on various stable branches does not yet work well with cgroups v2.
-    # Since ubuntu-latest now uses Ubuntu 22.04, we need to fall back to the ubuntu-20.04
-    # image for these stable branches. The list of branches where this is necessary will
-    # shrink over time, check out https://github.com/ansible-collections/news-for-maintainers/issues/28
-    # for the latest list.
-    runs-on: >-
-      ${{ contains(fromJson(
-          '["stable-2.9", "stable-2.10", "stable-2.11"]'
-      ), matrix.ansible) && 'ubuntu-20.04' || 'ubuntu-latest' }}
+    runs-on: ubuntu-latest
     steps:
       # Run sanity tests inside a Docker container.
       # The docker container has all the pinned dependencies that are
@@ -82,10 +72,7 @@ jobs:
     # image for these stable branches. The list of branches where this is necessary will
     # shrink over time, check out https://github.com/ansible-collections/news-for-maintainers/issues/28
     # for the latest list.
-    runs-on: >-
-      ${{ contains(fromJson(
-          '["stable-2.9", "stable-2.10", "stable-2.11"]'
-      ), matrix.ansible) && 'ubuntu-20.04' || 'ubuntu-latest' }}
+    runs-on: ubuntu-latest
     name: I (Ⓐ${{ matrix.ansible }}+py${{ matrix.python }}) - director ${{ matrix.icinga_director }}
     strategy:
       fail-fast: false
@@ -94,83 +81,13 @@ jobs:
           - 1.8.1
           - 1.11.1
         ansible:
+          - stable-2.17
+          - stable-2.18
           - devel
-          - stable-2.14
-          - stable-2.15
-          - stable-2.16
-        # - milestone
         python:
-          - '3.7'
-          - '3.8'
-          - '3.9'
           - '3.10'
           - '3.11'
           - '3.12'
-        include:
-          # Add new versions announced in
-          # https://github.com/ansible-collections/news-for-maintainers in a timely manner,
-          # consider dropping testing against EOL versions and versions you don't support.
-          # ansible-core 2.14
-          #
-          # icinga-director 1.8.1
-          - ansible: stable-2.14
-            python: '2.7'
-            icinga_director: 1.8.1
-          - ansible: stable-2.14
-            python: '3.5'
-            icinga_director: 1.8.1
-          - ansible: stable-2.14
-            python: '3.6'
-            icinga_director: 1.8.1
-          # ansible-core 2.15
-          - ansible: stable-2.15
-            python: '2.7'
-            icinga_director: 1.8.1
-          - ansible: stable-2.15
-            python: '3.5'
-            icinga_director: 1.8.1
-          - ansible: stable-2.15
-            python: '3.6'
-            icinga_director: 1.8.1
-          # ansible-core 2.16
-          - ansible: stable-2.16
-            python: '2.7'
-            icinga_director: 1.8.1
-          - ansible: stable-2.16
-            python: '3.6'
-            icinga_director: 1.8.1
-          # icinga-director 1.11.1
-          - ansible: stable-2.14
-            python: '2.7'
-            icinga_director: 1.11.1
-          - ansible: stable-2.14
-            python: '3.5'
-            icinga_director: 1.11.1
-          - ansible: stable-2.14
-            python: '3.6'
-            icinga_director: 1.11.1
-          # ansible-core 2.15
-          - ansible: stable-2.15
-            python: '2.7'
-            icinga_director: 1.11.1
-          - ansible: stable-2.15
-            python: '3.5'
-            icinga_director: 1.11.1
-          - ansible: stable-2.15
-            python: '3.6'
-            icinga_director: 1.11.1
-          # ansible-core 2.16
-          - ansible: stable-2.16
-            python: '2.7'
-            icinga_director: 1.11.1
-          - ansible: stable-2.16
-            python: '3.6'
-            icinga_director: 1.11.1
-        exclude:
-          - python: '3.12'
-            ansible: stable-2.14
-          - python: '3.12'
-            ansible: stable-2.15
     services:
       icinga:
         image: ghcr.io/telekom-mms/icinga2:director-${{ matrix.icinga_director }}
@@ -183,7 +100,7 @@ jobs:
           under Python ${{ matrix.python }}
         # See the documentation for the following GitHub action on
         # https://github.com/ansible-community/ansible-test-gh-action/blob/main/README.md
-        uses: ansible-community/ansible-test-gh-action@f4523b15a83b7d9eb65d859073ff49ad935a785a # v1.14.1
+        uses: ansible-community/ansible-test-gh-action@d3a8ec7a59694e25e210fcd44738910149537f0e # v1.17.0
         with:
           ansible-core-version: ${{ matrix.ansible }}
           # OPTIONAL command to run before invoking `ansible-test integration`
@@ -197,3 +114,23 @@ jobs:
           # which should improve CI performance. See limitations on
           # https://github.com/ansible-community/ansible-test-gh-action#pull-request-change-detection
           pull-request-change-detection: true
+
+  docsite:
+    name: Lint extra docsite docs and links
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
+
+      - name: Set up Python
+        uses: actions/setup-python@e797f83bcb11b83ae66e0230d6156d7c80228e7c # v6
+        with:
+          python-version: 3.14
+
+      - name: Install antsibull-docs
+        run: pip install antsibull-docs --disable-pip-version-check
+
+      - name: Run collection docs linter
+        run: antsibull-docs  lint-collection-docs --plugin-docs --validate-collection-refs all --disallow-unknown-collection-refs --skip-rstcheck .

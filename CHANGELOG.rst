@@ -1,12 +1,104 @@
-=========================================
-telekom_mms.icinga_director Release Notes
-=========================================
+===========================================
+telekom\_mms.icinga\_director Release Notes
+===========================================
 
 .. contents:: Topics
 
+v2.5.0
+======
+
+Minor Changes
+-------------
+
+- Feat: add some parameters to the icinga service module (https://github.com/telekom-mms/ansible-collection-icinga-director/pull/289)
+
+Bugfixes
+--------
+
+- Fix doc generation and remove need for iteritems (https://github.com/telekom-mms/ansible-collection-icinga-director/pull/296)
+- Fix: remove default for states parameter in icinga_dependency_apply (https://github.com/telekom-mms/ansible-collection-icinga-director/pull/290)
+
+v2.4.1
+======
+
+Bugfixes
+--------
+
+- Fix: remove default for states parameter in icinga_dependency_apply (https://github.com/telekom-mms/ansible-collection-icinga-director/pull/290)
+
+v2.3.1
+======
+
+Minor Changes
+-------------
+
+- Add zone option for icinga_user_group module (https://github.com/telekom-mms/ansible-collection-icinga-director/pull/286)
+
+v2.3.0
+======
+
+Minor Changes
+-------------
+
+- Add API timeout option for all modules (https://github.com/telekom-mms/ansible-collection-icinga-director/pull/282)
+- Add support for IcingaDB in inventory plugin (https://github.com/telekom-mms/ansible-collection-icinga-director/pull/274)
+- Icinga dependency modules implementation (https://github.com/telekom-mms/ansible-collection-icinga-director/pull/272)
+
+Bugfixes
+--------
+
+- Bug: dependency apply module raises error when using a variable for parent host or service (https://github.com/telekom-mms/ansible-collection-icinga-director/pull/276)
+- Extend checks in diff as a workaround for type confusion with the Director API (https://github.com/telekom-mms/ansible-collection-icinga-director/pull/278)
+- add 'groups' parameter to task 'icinga_user.yml' (https://github.com/telekom-mms/ansible-collection-icinga-director/pull/284)
+
+New Modules
+-----------
+
+- telekom_mms.icinga_director.icinga_dependency_apply - Manage dependency apply rules in Icinga2
+
+v2.2.3
+======
+
+Minor Changes
+-------------
+
+- Icinga dependency modules implementation (https://github.com/telekom-mms/ansible-collection-icinga-director/pull/272)
+
+Bugfixes
+--------
+
+- Bug: dependency apply module raises error when using a variable for parent host or service (https://github.com/telekom-mms/ansible-collection-icinga-director/pull/276)
+
+v2.2.2
+======
+
+v2.2.1
+======
+
+Bugfixes
+--------
+
+- Add Icinga notification template imports (https://github.com/telekom-mms/ansible-collection-icinga-director/pull/267)
+
+v2.1.3
+======
+
+Minor Changes
+-------------
+
+- Add vars parameter to user_template and user modules (https://github.com/telekom-mms/ansible-collection-icinga-director/pull/262)
+
+v2.1.2
+======
 
 v2.1.1
 ======
+
+Bugfixes
+--------
+
+- change notification interval variable to int-type (https://github.com/telekom-mms/ansible-collection-icinga-director/pull/254)
+- set user_groups in notification to empty list (https://github.com/telekom-mms/ansible-collection-icinga-director/pull/255)
 
 v2.1.0
 ======
@@ -288,3 +380,4 @@ Minor Changes
 
 v1.18.1
 =======
+
